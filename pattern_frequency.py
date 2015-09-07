@@ -9,7 +9,7 @@ def pattern_count(text, pattern):
     
 def freq_words(text,k):
     freq_pat = []
-    count = [1,2,3]
+    count = []
     for i in range(len(text) - k):
         pattern = text[i:i+k]
         count.append(pattern_count(text, pattern))
