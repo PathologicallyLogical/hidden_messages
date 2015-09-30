@@ -38,45 +38,32 @@ def num_to_pat(num, k):
     return final
 
 nucleotides =  ["G","C","A","T"]
-def one_neighbors(text):
+
+def neighbors(text,d):
+    if d == 0:
+        return text
     if len(text) == 1:
         return nucleotides
-    neighborhood = [text]
-    replace = ""
-    for i in range(len(text)):
-        symbol = text[i]
-        for j in nucleotides:
-            if j != symbol:
-                for m in range(len(text)):
-                    if m != i:
-                        replace += text[m]
-                    else:
-                        replace +=j
-                neighborhood.append(replace)
-            replace = ""
+    neighborhood = []
+    suffix_neighbors = neighbors(text[1:],d)
+    for string in suffix_neighbors:
+        if ham_distance(text[1:], string) < d:
+            for x in nucleotides:
+                neighborhood.append(x+string)
+        else:
+            neighborhood.append(text[:1]+string)
     return neighborhood
+
     
-def neighbors(text,d):
-    fin_arr = []
-    x = one_neighbors(text)
-    for i in range(d):
-        for j in x:
-            y = one_neighbors(j)
-            for k in y:
-                fin_arr.append(k)
-        x = y
-    fin = list(set(fin_arr))
-    return fin
-    
-def approx_match(pat,text,d):
-    e = len(pat)
-    final = ""
-    for i in range(len(text) - e+1):
-        bit = text[i:i+e]
-        diff = ham_distance(pat,bit)
-        if diff <= d:
-            final+=str(i)+" "
-    return final
+def approx_pat_count(pat,text,d):
+    count = 0
+    num = len(text) - len(pat)
+    for i in range(0,num+1):
+        patt = text[i:i+len(pat)]
+        thing = ham_distance(pat,patt)
+        if thing <= d:
+            count +=1
+    return count
             
 def frq_wrds_w_mismatch(text,k,d):
     frq_pat = []
@@ -90,24 +77,18 @@ def frq_wrds_w_mismatch(text,k,d):
         neighborhood = neighbors(text[i:i+k],d)
         for pattern in neighborhood:
             index = pat_to_num(pattern)
-            close[index] == 1
+            close[index] = 1
     for i in range(big):
         if close[i] ==1:
-            pattern = num_to_pat(i,k)
-            frq_arr[i] = approx_pat_count(text,pattern,d)
-    max_count = max(frq_arr)
+            pat = num_to_pat(i,k)
+            frq_arr[i] = approx_pat_count(pat,text,d)
+    max_count = 0
+    for i in range(len(frq_arr)):
+        if frq_arr[i] > max_count:
+            max_count = frq_arr[i]
     for i in range(big):
         if frq_arr[i] == max_count:
             pattern = num_to_pat(i,k)
             frq_pat.append(pattern)
     return frq_pat
-    
-
-        
-        
-        
-        
-        
-        
-        
-        
+   
