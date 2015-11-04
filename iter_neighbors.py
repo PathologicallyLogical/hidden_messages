@@ -1,4 +1,3 @@
-
 def ham_distance(dna1,dna2):
     count = 0
     for i in range(len(dna1)):
@@ -21,14 +20,17 @@ def one_neighbors(text):
     return set(neighborhood)
     
 def iter_neighbors(pattern,d):
-    neighborhood = set(pattern)
+    neighborhood = [pattern]
+    if d == 0:
+        return neighborhood
+    if d == 1:
+        return one_neighbors(pattern)
     for i in range(d):
-        for string in neighborhood:
-            store = one_neighbors(pattern)
-            neighborhood = neighborhood.union(store)
-    neigh_arr = []
-    for j in neighborhood:
-        if len(j) == len(pattern):
-            neigh_arr.append(j)
+        for k in neighborhood:
+            store = one_neighbors(k)
+            for j in store:
+                if j not in neighborhood:
+                    if ham_distance(pattern,j) <= d:
+                        neighborhood.append(j)
+    neigh_arr = set(neighborhood)
     return neigh_arr
-    
