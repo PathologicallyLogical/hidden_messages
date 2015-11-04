@@ -20,17 +20,16 @@ def one_neighbors(text):
     return set(neighborhood)
     
 def iter_neighbors(pattern,d):
-    neighborhood = set(pattern)
+    neighborhood = [pattern]
     if d == 0:
-        return [pattern]
+        return neighborhood
     for i in range(d):
         for string in neighborhood:
-            store = one_neighbors(pattern)
-            neighborhood = neighborhood.union(store)
-    neigh_arr = []
-    for j in neighborhood:
-        if len(j) == len(pattern):
-            neigh_arr.append(j)
+            store = one_neighbors(string)
+            for j in store:
+                if j not in neighborhood:
+                    neighborhood.append(j)
+    neigh_arr = set(neighborhood)
     return neigh_arr
     
 def str_check(string,pat,d):
@@ -59,4 +58,3 @@ def motif_enumeration(dna,k,d):
 
 dna = ["AAAAA","AAAAA","AAAAA"]
 a = motif_enumeration(dna,3,3)
-    
