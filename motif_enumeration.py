@@ -34,28 +34,31 @@ def iter_neighbors(pattern,d):
                         neighborhood.append(j)
     neigh_arr = set(neighborhood)
     return neigh_arr
-    
-def str_check(string,pat,d):
-    for i in range(len(string)-len(pat)):
-        patt = string[i:i+len(pat)]
-        if patt ==pat:
+
+def string_checker(string,pattern,d):
+    for a in range(len(string) - len(pattern)+1):
+        string_bit = string[a:a+len(pattern)]
+        if ham_distance(pattern,string_bit) <=d:
             return True
-    
+    else: 
+        return False
+
 def motif_enumeration(dna,k,d):
     patterns = []
-    for i in range(0,len(dna[0])-k+1):
+    for i in range(len(dna[0])-k+1):
         patt = dna[0][i:i+k]
-        store = iter_neighbors(patt,d)
-        for neighbor in store:
+        patt_neighbors = iter_neighbors(patt,d)
+        for neighbor in patt_neighbors:
             count = 0
-            for m in range(len(dna)):
-                string = dna[m]
-                if str_check(string, neighbor,d) == True:
+            for string in dna:
+                if string_checker(string,patt,d) == True:
                     count+=1
-            if count >= len(dna):
-                print("please help")
-                patterns.append(neighbor)
+                if count == len(dna):
+                    patterns.append(neighbor)
+    patterns = set(patterns)
     return patterns
-    
-    
-dna = ["AAAAA","AAAAA","AAAAA"]
+            
+string_checker("TGCCTTA","ATA",1)
+
+dna=["CATTTTATGTCCAGGAACATGAGCA","GCAGTCGAGGTATGCTCCCACCTAT","CCTCCCTAGGCCGCTTTGTTCAACG","TCAGGTGGTGGCGTTCGGGTAGGAG","ATAGGGCCTGCATCCAGCTCCAAGG","TGAGGGGTATGCACTAATGCTTGCG"]
+
