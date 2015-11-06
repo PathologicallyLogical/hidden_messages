@@ -1,4 +1,3 @@
-#INCOMPLETE
 def ham_distance(dna1,dna2):
     count = 0
     for i in range(len(dna1)):
@@ -37,7 +36,7 @@ def iter_neighbors(pattern,d):
     return neigh_arr
     
 def str_check(string,pat,d):
-    for i in range(len(string)-len(pat)+1):
+    for i in range(len(string)-len(pat)):
         patt = string[i:i+len(pat)]
         if patt ==pat:
             return True
@@ -47,16 +46,16 @@ def motif_enumeration(dna,k,d):
     for i in range(0,len(dna[0])-k+1):
         patt = dna[0][i:i+k]
         store = iter_neighbors(patt,d)
-        print(len(store))
         for neighbor in store:
             count = 0
-            for string in dna:
+            for m in range(len(dna)):
+                string = dna[m]
                 if str_check(string, neighbor,d) == True:
                     count+=1
-            print(count)
             if count >= len(dna):
+                print("please help")
                 patterns.append(neighbor)
     return patterns
     
     
-dna = ["ATTTTAAGAACATTCATGGAAAGCG","TCTAGAGGGAGTTGTTTAAGCAGGG","AATAGTCGTCCGACCAGGCATCTGA","CTGTACAGACGGAATATAAGACGTA","TTCTAGGTCGCGCCCAGGTAACACG","AGGTATTAGACAGATATGGCAAAGC"]
+dna = ["AAAAA","AAAAA","AAAAA"]
