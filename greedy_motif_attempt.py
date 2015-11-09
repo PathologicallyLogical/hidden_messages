@@ -59,15 +59,20 @@ def add_mins(pattern,dna_arr):
     
 def median_string(dna,k):
     distance = 100
+    final = []
     for i in range((4**k)-1):
         pat = num_to_pat(i,k)
         dist_thing = add_mins(pat,dna)
         if distance > dist_thing:
             distance = dist_thing
             median = pat
-    return median
+    for i in range((4**k)-1):
+        pat = num_to_pat(i,k)
+        if add_mins(pat,dna) <= distance:
+            final.append(pat)
+    return final
 #given an array of dna strings and k, it returns the pattern with the smallest score (I think)
-    
+
 def matrix_maker(matrix_string):
     big_arr = matrix_string.splitlines()
     final_arr = []
@@ -122,7 +127,7 @@ def profile_probable(dna_str,k,prob_matrix,boolean):
         return max_pattern
     else:
         return max_prob
-#given a long dna_str, k, a matrix, and a bool, it can return either the highest possible 
+#given a long dna_str, k, a matrix, and a bool, it can return either the highest possible probability in the string for a k-mer, or just the associated pattern 
 
 c = profile_probable(b,14,a,True)
 
@@ -135,6 +140,7 @@ def letter_marker(num):
         return "G"
     elif num == 3:
         return "T"
+#given a row number, returns associated letter
     
 def probability_searcher(prob_matrix,k):
     final_pat = ""
@@ -145,28 +151,59 @@ def probability_searcher(prob_matrix,k):
                 max_letter = letter_marker(i)
         final_pat+=max_letter
     return final_pat
+#given a prob matrix, returns the most probable pattern
     
-def probability_matrix_maker(list_of_mers):
+def probability_matrix_maker(list_of_mers,k):
     final_arr = []
-    c-count = 0
-    a_count = 0
-    g_count = 0
-    t_count = 0
+    a_row = []
+    c_row = []
+    g_row = []
+    t_row = []
+    for n in range(k):
+        c_count = 0
+        a_count = 0
+        g_count = 0
+        t_count = 0
+        total = len(list_of_mers)
+        for m in range(len(list_of_mers)):
+            store = list_of_mers[m][n]
+            if store == "A":
+                a_count +=1
+            elif store == "C":
+                c_count +=1
+            elif store == "G":
+                g_count +=1
+            elif store == "T":
+                t_count +=1
+        a_prob = a_count/total
+        c_prob = c_count/total
+        g_prob = g_count/total
+        t_prob = t_count/total
+        a_row.append(a_prob)
+        c_row.append(c_prob)
+        g_row.append(g_prob)
+        t_row.append(t_prob)
+    final_arr.append(a_row)
+    final_arr.append(c_row)
+    final_arr.append(g_row)
+    final_arr.append(t_row)
+    return final_arr
+
+listmers = ["ACGT","CGAT","GCAT","GAAT"]
+a = probability_matrix_maker(listmers,4)
 
 def greedy_motif_search(k,t,dna_arr):
     best_motif = []
     for i in range(len(dna_arr[0])-k+1):
         all_together = []
+        print(i)
         for string in range(len(dna)):
+            print(string,i+k)
             k-mer_in_question = dna[string][i:i+k]
+            print(k_mer_in_question)
             all_together.append(k-mer_in_question)
-        temp_prob_mat = probability_matrix_maker(all_together)
-        temp_pat = 
-#in temp_pat, I want the most probable string in the probability matrix
-
-
-
-
+        temp_prob_mat = probability_matrix_maker(all_together,k)
+        temp_pat = probability_searcher(temp_prob_mat,k)
 
 
 
